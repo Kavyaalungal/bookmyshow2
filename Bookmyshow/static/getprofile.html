@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <img  alt="file image" id="file">
+    <p id="title"></p>
+    <script>
+        let title = document.getElementById("title");
+        let file = document.getElementById("file");
+
+        fetch("http://localhost:3000/api/get-file")
+        .then(res=>res.json())
+        .then(data=>{
+            console.log(data);
+            title.textContent = data[0].title;
+            file.src = data[0].file
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+<body>
+    <h1>Upload New Movies!</h1>
+    <form onsubmit="submitHandler(event)">
+        <input type="text" name="title" id="title" required><br><br>
+        <input type="file" name="file" id="file" required><br><br>
+       <input type="submit" value="upload">
+    </form>
+    <script>
+        function submitHandler(event) {
+            event.preventDefault();
+            let file = event.target[1].files[0];
+            let title = event.target[0].value;
+            convert(file)
+            .then(base64file=>{
+                fetch(`http://localhost:3000/api/upload`,{
+                    method:"post",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify({
+                        title:title,
+                        file:base64file
+                    })
+                })
+                .then(res=>res.text())
+                .then(data=>{
+                    alert(data)
+                })
+            })
+            .catch(error=>{
+                console.log(error);
+            })
+            
+        }
+        function convert(file){
+            return new Promise((res,rej)=>{
+                let fileReader = new FileReader();
+                fileReader.readAsDataURL(file);
+                fileReader.onload=() =>{
+                    res(fileReader.result)
+                }
+                fileReader.onerror = (error) =>{
+                    rej(error);
+                }
+            })
+        }
+        
+    </script>
+</body>
+</html>

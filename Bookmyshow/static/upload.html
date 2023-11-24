@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="upload.css">
+</head>
+<body>
+    <h1>Upload New Movies!</h1>
+    <form id="uploadfile" enctype="multipart/form-data">
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title" required><br><br>
+        <label for="file">Select a movie</label>
+        <input type="file" name="file" id="file" required><br><br>
+        <button type="button" onclick="uploadFile()">Upload</button>
+    </form>
+    <script>
+        function uploadFile() {
+            let details = document.getElementById("uploadfile");
+            let formData = new FormData(details)
+            fetch("http://localhost:3000/api/upload",{
+                method:"post",
+                body:formData
+            })
+            .then(res=>res.json())
+            .then(data=>{
+                console.log("Success:",data);
+                alert("movie uploaded successfully")
+            })
+            .catch(error=>{
+                console.log(error);
+                alert("error in uploading");
+
+            })
+
+            
+        }
+    </script>
+</body>
+</html>
